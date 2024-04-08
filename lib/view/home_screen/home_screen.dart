@@ -75,60 +75,53 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           InkWell(
             onTap: () {
+              taskController.clear();
               showModalBottomSheet(
                 context: context,
-                builder: (context) =>
-                    StatefulBuilder(builder: (context, bottomSetState) {
-                  taskController.clear();
-                  bottomSetState(() {});
-                  return Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 15, vertical: 30),
-                    child: Column(
-                      children: [
-                        TextField(
-                          controller: taskController,
-                          onTapOutside: (event) =>
-                              FocusScope.of(context).unfocus(),
-                          decoration: InputDecoration(
-                              fillColor: Colors.grey.withOpacity(.4),
-                              filled: true,
-                              hintText: "Add a new task",
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10))),
+                builder: (context) => Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
+                  child: Column(
+                    children: [
+                      TextField(
+                        controller: taskController,
+                        onTapOutside: (event) =>
+                            FocusScope.of(context).unfocus(),
+                        decoration: InputDecoration(
+                            fillColor: Colors.grey.withOpacity(.4),
+                            filled: true,
+                            hintText: "Add a new task",
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10))),
+                      ),
+                      const SizedBox(height: 30),
+                      Container(
+                        height: 50,
+                        width: 80,
+                        decoration: BoxDecoration(
+                          color: Colors.green,
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                        const SizedBox(height: 30),
-                        Container(
-                          height: 50,
-                          width: 80,
-                          decoration: BoxDecoration(
-                            color: Colors.green,
-                            borderRadius: BorderRadius.circular(10),
+                        child: Center(
+                            child: InkWell(
+                          onTap: () async {
+                            await TodoController.addData(TaskModel(
+                                text: taskController.text, isCompleted: false));
+                            Navigator.pop(context);
+                            setState(() {});
+                          },
+                          child: const Text(
+                            "Add",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold),
                           ),
-                          child: Center(
-                              child: InkWell(
-                            onTap: () async {
-                              await TodoController.addData(TaskModel(
-                                  text: taskController.text,
-                                  isCompleted: false));
-
-                              bottomSetState(() {
-                                Navigator.pop(context);
-                              });
-                            },
-                            child: const Text(
-                              "Add",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          )),
-                        )
-                      ],
-                    ),
-                  );
-                }),
+                        )),
+                      )
+                    ],
+                  ),
+                ),
               );
             },
             child: Container(
